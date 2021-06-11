@@ -1,7 +1,7 @@
 name:                include-env
 version:             0.1.0.0
--- synopsis:
--- description:
+synopsis:            Include the value of an environment variable at compile time
+description:         Embed secrets (e.g. API keys) inside production artifacts without checking them into the repository.
 homepage:            https://github.com/unfoldml/include-env
 license:             BSD3
 license-file:        LICENSE
@@ -12,7 +12,7 @@ category:            Development
 build-type:          Simple
 extra-source-files:  README.md
 cabal-version:       >=1.10
-tested-with:         GHC == 8.10.4
+tested-with:         GHC == 8.6.5, GHC == 8.10.4
 
 library
   default-language:    Haskell2010
@@ -20,7 +20,7 @@ library
   hs-source-dirs:      src
   exposed-modules:     IncludeEnv.TH
   build-depends:       base >= 4.7 && < 5
-                     , template-haskell
+                     , template-haskell >= 2.14
 
 executable include-env
   default-language:    Haskell2010
@@ -29,17 +29,6 @@ executable include-env
   main-is:             Main.hs
   build-depends:       base
                      , include-env
-
--- test-suite spec
---   default-language:    Haskell2010
---   ghc-options:         -Wall
---   type:                exitcode-stdio-1.0
---   hs-source-dirs:      test
---   main-is:             Spec.hs
---   build-depends:       base
---                      , include-env
---                      , hspec
---                      , QuickCheck
 
 source-repository head
   type:     git
