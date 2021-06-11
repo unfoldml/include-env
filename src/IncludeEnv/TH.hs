@@ -30,7 +30,8 @@ includeEnv e varname = do
     Nothing -> error $ unwords ["Cannot find variable", e, "in the environment."]
     where
       decl :: String -> String -> Q [Dec]
-      decl n x = fmap (:[]) $ pure $ ValD qpat qbody [] where
+      decl n x = pure [dq] where
+        dq = ValD qpat qbody []
         qpat = VarP (mkName n)
         qbody = NormalB (LitE (StringL x))
 
