@@ -1,2 +1,5 @@
 # include-env
-Include environment variables in executables at compile time
+
+[![Build Status](https://travis-ci.org/unfoldml/include-env.png)](https://travis-ci.org/unfoldml/include-env)
+
+TODO Description.
