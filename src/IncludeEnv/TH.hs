@@ -1,10 +1,22 @@
 {-# language TemplateHaskell #-}
 {-# options_ghc -Wno-unused-imports #-}
 {-|
-Include the value of an environment variable at compile time
+Include the value of an environment variable in the binary at compile time.
 
 == Rationale
-The first use case for this library is to embed secrets (e.g. API keys) inside production artifacts without checking them into the repository.
+Users might want to embed secrets (e.g. API keys, database connection strings) inside production artifacts without checking these into the repository.
+
+== Example
+
+@
+import IncludeEnv.TH (includeEnv)
+
+$(`includeEnv` \"SHELL\" "shl")
+shl :: String
+
+main :: IO ()
+main = putStrLn $ unwords ["your current shell :", shl]
+@
 
 -}
 module IncludeEnv.TH (includeEnv) where
@@ -17,9 +29,11 @@ import Language.Haskell.TH.Syntax (Q, Exp(..), Dec(..), Pat(..), Name, mkName, B
 import Language.Haskell.TH.Lib (valD)
 
 
--- | Include the value of an environment variable at compile time
+-- | Include the value of an environment variable at compile time.
 --
--- A fresh variable is declared each time this is computation is evaluated
+-- A fresh variable of type `String` is declared each time this is computation is evaluated.
+--
+-- Note : will crash with `error` if the environment variable is not found.
 includeEnv :: String -- ^ name of environment variable to be looked up
            -> String -- ^ name of new value
            -> Q [Dec]
