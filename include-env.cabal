@@ -1,5 +1,5 @@
 name:                include-env
-version:             0.2.0.0
+version:             0.3.0.0
 synopsis:            Include the value of an environment variable at compile time
 description:         Embed secrets (e.g. API keys) inside production artifacts at compile time.
 homepage:            https://github.com/unfoldml/include-env

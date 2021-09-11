@@ -25,7 +25,7 @@ import System.Environment (lookupEnv)
 
 -- template-haskell
 import Language.Haskell.TH (runIO, runQ)
-import Language.Haskell.TH.Syntax (Q, Exp(..), Dec(..), Pat(..), Name, mkName, Body(..), Lit(..))
+import Language.Haskell.TH.Syntax (Q, Exp(..), Dec(..), Pat(..), Name, mkName, Body(..), Lit(..), reportWarning)
 import Language.Haskell.TH.Lib (valD)
 
 
@@ -60,7 +60,7 @@ includeEnvLenient e varname = do
   case mstr of
     Just str -> decl varname str
     Nothing -> do
-      runIO $ putStrLn $ unwords ["*** WARNING : Cannot find variable", e, "in the environment."]
+      reportWarning $ unwords ["*** WARNING : Cannot find variable", e, "in the environment."]
       decl varname ""
     where
       decl :: String -> String -> Q [Dec]
@@ -68,5 +68,4 @@ includeEnvLenient e varname = do
         dq = ValD qpat qbody []
         qpat = VarP (mkName n)
         qbody = NormalB (LitE (StringL x))
-
 
