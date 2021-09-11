@@ -19,7 +19,7 @@ main = putStrLn $ unwords ["your current shell :", shl]
 @
 
 -}
-module IncludeEnv.TH (includeEnv) where
+module IncludeEnv.TH (includeEnv, includeEnvLenient) where
 
 import System.Environment (lookupEnv)
 
@@ -49,5 +49,24 @@ includeEnv e varname = do
         qpat = VarP (mkName n)
         qbody = NormalB (LitE (StringL x))
 
+-- | Like 'includeEnv' but only prints a warning if the environment variable cannot be found.
+--
+-- NB : If the lookup fails, the declared value will contain an empty string.
+includeEnvLenient :: String -- ^ name of environment variable to be looked up
+                  -> String -- ^ name of new value
+                  -> Q [Dec]
+includeEnvLenient e varname = do
+  mstr <- runIO $ lookupEnv e
+  case mstr of
+    Just str -> decl varname str
+    Nothing -> do
+      runIO $ putStrLn $ unwords ["*** WARNING : Cannot find variable", e, "in the environment."]
+      decl varname ""
+    where
+      decl :: String -> String -> Q [Dec]
+      decl n x = pure [dq] where
+        dq = ValD qpat qbody []
+        qpat = VarP (mkName n)
+        qbody = NormalB (LitE (StringL x))
 
 
